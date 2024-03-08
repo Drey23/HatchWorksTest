@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import com.andreylindo.hatchworks.R
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
@@ -20,7 +22,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 fun PokemonCard(url: String, onTapped: ()-> Unit) {
     GlideImage(
         model = url,
-        contentDescription = "Pokemon Card",
+        contentDescription = LocalContext.current.getString(R.string.pokemon_card),
         modifier = Modifier
             .fillMaxHeight()
             .fillMaxWidth()

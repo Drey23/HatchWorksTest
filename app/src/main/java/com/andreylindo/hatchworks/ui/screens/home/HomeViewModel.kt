@@ -1,13 +1,18 @@
 package com.andreylindo.hatchworks.ui.screens.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.andreylindo.hatchworks.R
 import com.andreylindo.hatchworks.data.NetworkResult
 import com.andreylindo.hatchworks.data.repository.pokemon_repository.PokemonRepository
-import com.andreylindo.hatchworks.data.response.CardsData
+import com.andreylindo.hatchworks.common.ResourcesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,33 +25,36 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val pokemonRepository: PokemonRepository
+    private val pokemonRepository: PokemonRepository,
+    private val resourcesProvider: ResourcesProvider
 ) : ViewModel() {
 
-    private val _pokemons = MutableLiveData<List<CardsData>>()
+    private val _state = MutableStateFlow<HomeState>(HomeState.Nothing)
+    private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
 
-    val pokemons: LiveData<List<CardsData>>
-        get() = _pokemons
+    val state: StateFlow<HomeState>
+        get() = _state.asStateFlow()
+
+    val sideEffect: SharedFlow<HomeSideEffect>
+        get() = _sideEffect.asSharedFlow()
 
     fun getPokemons() {
         viewModelScope.launch {
-            try {
-                when(val response = pokemonRepository.getPokemons()) {
-                    is NetworkResult.Success -> {
-                        val listOfPokemons = response.data
-                        _pokemons.postValue(listOfPokemons)
-                    }
+            _state.value = HomeState.Loading
 
-                    is NetworkResult.Error -> {
-
-                    }
-
-                    is NetworkResult.Exception -> {
-
-                    }
+            when(val response = pokemonRepository.getPokemons()) {
+                is NetworkResult.Success -> {
+                    _state.value = HomeState.Loaded(response.data)
                 }
-            } catch (e: Exception) {
-                print(e)
+
+                is NetworkResult.Error -> {
+                    _state.value = HomeState.Error("Couldn't get data")
+                }
+
+                is NetworkResult.Exception -> {
+                    _state.value = HomeState.Error("Couldn't get data")
+                    _sideEffect.emit(HomeSideEffect.ShowErrorMessage("Unexpected Error"))
+                }
             }
         }
     }

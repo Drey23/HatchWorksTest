@@ -28,7 +28,7 @@ fun NavGraph(navController: NavHostController, homeViewModel: HomeViewModel) {
             HomeScreen(navController, homeViewModel)
         }
         composable(
-            route = RouteScreens.Details.route + "?imageUrl={$IMAGE_URL_KEY}",
+            route = RouteScreens.Details().route + "?imageUrl={$IMAGE_URL_KEY}",
             arguments = listOf(
                 navArgument(IMAGE_URL_KEY) {
                     type = NavType.StringType

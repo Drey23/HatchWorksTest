@@ -42,7 +42,7 @@ fun DetailsScreen(navController: NavHostController, imageUrl: String) {
     ) { innerPadding ->
         GlideImage(
             model = imageUrl,
-            contentDescription = "Pokemon Card",
+            contentDescription = LocalContext.current.getString(R.string.pokemon_card),
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth()
