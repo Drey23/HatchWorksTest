@@ -88,10 +88,13 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel) {
                         .padding(innerPadding),
                 ) {
                     items(count = pokemons.size) { index ->
-                        val imageUrl = pokemons[index].images?.large.orEmpty()
+                        val pokemon = pokemons[index]
+                        val imageUrl = pokemon.images?.large.orEmpty()
+                        val name = pokemon.name
 
                         PokemonCard(
-                            imageUrl
+                            imageUrl,
+                            name
                         ) {
                             navController.navigate(RouteScreens.Details(imageUrl).route)
                         }

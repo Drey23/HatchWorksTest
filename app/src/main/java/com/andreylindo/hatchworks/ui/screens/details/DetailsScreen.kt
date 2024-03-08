@@ -4,8 +4,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,7 +23,6 @@ import com.bumptech.glide.integration.compose.GlideImage
  * @since 3/5/24
  */
 @OptIn(
-    ExperimentalMaterial3Api::class,
     ExperimentalGlideComposeApi::class,
 )
 @Composable
@@ -33,7 +31,7 @@ fun DetailsScreen(navController: NavHostController, imageUrl: String) {
         topBar = {
             CustomTopAppBar(
                 title = LocalContext.current.getString(R.string.details),
-                Icons.Filled.ArrowBack,
+                Icons.AutoMirrored.Filled.ArrowBack,
                 navIconClick = {
                     navController.popBackStack()
                 }

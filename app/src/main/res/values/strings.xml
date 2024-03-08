@@ -3,4 +3,6 @@
     <string name="home">Home</string>
     <string name="details">Details</string>
     <string name="pokemon_card">Pokemon Card</string>
+    <string name="could_not_get_data">Couldn\'t get data</string>
+    <string name="unexpected_error">Unexpected Error</string>
 </resources>

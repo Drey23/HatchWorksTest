@@ -3,9 +3,9 @@ package com.andreylindo.hatchworks.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.andreylindo.hatchworks.R
+import com.andreylindo.hatchworks.common.ResourcesProvider
 import com.andreylindo.hatchworks.data.NetworkResult
 import com.andreylindo.hatchworks.data.repository.pokemon_repository.PokemonRepository
-import com.andreylindo.hatchworks.common.ResourcesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,18 +42,25 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = HomeState.Loading
 
-            when(val response = pokemonRepository.getPokemons()) {
+            when (val response = pokemonRepository.getPokemons()) {
                 is NetworkResult.Success -> {
                     _state.value = HomeState.Loaded(response.data)
                 }
 
                 is NetworkResult.Error -> {
-                    _state.value = HomeState.Error("Couldn't get data")
+                    _state.value =
+                        HomeState.Error(resourcesProvider.getString(R.string.could_not_get_data))
                 }
 
                 is NetworkResult.Exception -> {
-                    _state.value = HomeState.Error("Couldn't get data")
-                    _sideEffect.emit(HomeSideEffect.ShowErrorMessage("Unexpected Error"))
+                    _state.value =
+                        HomeState.Error(resourcesProvider.getString(R.string.could_not_get_data))
+
+                    _sideEffect.emit(
+                        HomeSideEffect.ShowErrorMessage(
+                            resourcesProvider.getString(R.string.unexpected_error)
+                        )
+                    )
                 }
             }
         }

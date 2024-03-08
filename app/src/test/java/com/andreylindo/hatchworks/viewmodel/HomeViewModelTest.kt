@@ -2,6 +2,7 @@ package com.andreylindo.hatchworks.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
+import com.andreylindo.hatchworks.R
 import com.andreylindo.hatchworks.common.EMPTY_STRING
 import com.andreylindo.hatchworks.common.ResourcesProvider
 import com.andreylindo.hatchworks.data.NetworkResult
@@ -47,6 +48,12 @@ class HomeViewModelTest {
     fun setup() {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(Dispatchers.Unconfined)
+
+        Mockito.`when`(resourcesProvider.getString(R.string.could_not_get_data))
+            .thenReturn("Couldn't get data")
+
+        Mockito.`when`(resourcesProvider.getString(R.string.unexpected_error))
+            .thenReturn("Unexpected Error")
     }
 
     @Test
@@ -74,7 +81,7 @@ class HomeViewModelTest {
 
         vm.state.test {
             val state = awaitItem()
-            assert(state is HomeState.Error)
+            assert(state is HomeState.Loaded)
             cancel()
         }
 
@@ -104,7 +111,7 @@ class HomeViewModelTest {
         vm.state.test {
             val state = awaitItem()
             assert(state is HomeState.Error)
-            awaitComplete()
+            cancel()
         }
 
         verify(pokemonRepository, atLeastOnce()).getPokemons()

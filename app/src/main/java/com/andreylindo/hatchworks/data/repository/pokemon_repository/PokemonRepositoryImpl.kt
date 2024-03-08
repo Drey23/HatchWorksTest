@@ -14,7 +14,6 @@ import javax.inject.Inject
  * @since 3/6/24
  */
 class PokemonRepositoryImpl @Inject constructor(private val api: PokemonApi) : PokemonRepository {
-
     override suspend fun getPokemons(): NetworkResult<List<CardsData>> {
         return try {
             val response = api.getPokemons()

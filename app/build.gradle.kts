@@ -88,6 +88,7 @@ dependencies {
 
     // region Hilt
     implementation("com.google.dagger:hilt-android:2.51")
+    implementation("com.google.ar:core:1.41.0")
     kapt("com.google.dagger:hilt-android-compiler:2.51")
     // endregion
 
